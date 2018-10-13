@@ -58,10 +58,13 @@ class Test extends Component {
       <div>
         <input type='file' onChange={this.handleChange} />
         <div id='drop' onDragOver={this.preventDefault} onDrop={this.handleDrop}>
-          <p>Drop files here!</p>
+          <center>  <p>Drop files here!</p> </center>
         </div>
         <img src={this.state.file} />
+
         <p>Text: {this.state.keywords}</p>
+
+
       </div>
     );
   }
