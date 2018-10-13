@@ -1,0 +1,31 @@
+{
+  "name": "license-plate-identifier",
+  "version": "0.1.0",
+  "description": "Takes license plate image converts to text and pulls details from database and gets current location.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamkishann/license-plate-identifier.git"
+  },
+  "author": "https://github.com/iamkishann/license-plate-identifier.git",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iamkishann/license-plate-identifier/issues"
+  },
+  "homepage": "https://github.com/iamkishann/license-plate-identifier#readme",
+  "devDependencies": {
+    "@babel/preset-react": "^7.0.0",
+    "electron": "^3.0.4",
+    "electron-builder": "^20.28.4",
+    "electron-webpack": "^2.3.1",
+    "eslint": "^5.7.0",
+    "eslint-plugin-react": "^7.11.1",
+    "image-to-text": "^1.0.8",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "webpack": "^4.20.2"
+  }
+}
