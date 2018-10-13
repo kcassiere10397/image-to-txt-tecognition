@@ -2,9 +2,12 @@
   "name": "license-plate-identifier",
   "version": "0.1.0",
   "description": "Takes license plate image converts to text and pulls details from database and gets current location.",
-  "main": "index.js",
+  "main": "src/main/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint . --ext .js",
+    "lint": "eslint . --fix --ext .js",
+    "start": "electron-webpack dev",
+    "build": "electron-webpack && electron-builder"
   },
   "repository": {
     "type": "git",
