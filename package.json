@@ -28,8 +28,12 @@
     "eslint-plugin-react": "^7.11.1",
     "image-to-text": "^1.0.8",
     "outdent": "^0.7.0",
+    "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "stylelint": "^9.6.0",
+    "stylelint-config-recommended": "^2.1.0",
+    "stylelint-order": "^1.0.0",
     "webpack": "^4.20.2"
   }
 }
