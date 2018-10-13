@@ -35,7 +35,7 @@ function createMainWindow() {
     });
   });
 
-  return window;
+  return window
 }
 
 // quit application when all windows are closed
