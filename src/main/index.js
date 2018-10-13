@@ -18,18 +18,16 @@ const darwinMenu = {
     { role: 'hideothers' },
     { role: 'unhide' },
     { type: 'separator' },
-    { role: 'quit' },
+    {
+      label: 'Quit',
+      accelerator: 'CommandOrControl+Q',
+      click() {
+        window.destroy();
+      },
+    },
   ],
 };
 const menu = [
-  {
-    label: 'File',
-    submenu: [
-      { role: 'close' },
-      { type: 'separator' },
-      { role: 'quit' },
-    ],
-  },
   {
     label: 'Edit',
     submenu: [
@@ -60,6 +58,7 @@ const menu = [
     role: 'window',
     submenu: [
       { role: 'minimize' },
+      { role: 'close' },
     ],
   },
   {
@@ -98,12 +97,11 @@ ipcMain.on('post', (event, notification, data) => window.webContents.send(notifi
 
 function createMainWindow() {
   window = new BrowserWindow({
-    title: 'NGCP Ground Control Station',
+    title: 'License Plate Identifier',
     show: false,
   });
 
   if (isDevelopment) {
-    // window.webContents.openDevTools();
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
   } else {
     window.loadURL(formatUrl({
@@ -113,15 +111,19 @@ function createMainWindow() {
     }));
   }
 
-  // window.maximize();
-
   window.on('ready-to-show', () => {
     window.show();
     window.focus();
   });
 
+  window.on('close', event => {
+    event.preventDefault();
+    window.hide();
+  });
+
   window.on('closed', () => {
     window = null;
+    app.quit();
   });
 }
 
