@@ -27,6 +27,7 @@
     "eslint": "^5.7.0",
     "eslint-plugin-react": "^7.11.1",
     "image-to-text": "^1.0.8",
+    "outdent": "^0.7.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "webpack": "^4.20.2"

@@ -1,59 +1,165 @@
-import { app, BrowserWindow } from 'electron';
-import * as path from 'path';
+import { app, BrowserWindow, dialog, ipcMain, Menu, shell } from 'electron';
+import fs from 'fs';
+import path from 'path';
 import { format as formatUrl } from 'url';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-// global reference to mainWindow (necessary to prevent window from being garbage collected)
-let mainWindow;
+const configFilter = { name: 'Picture', extensions: ['png', 'jpg', 'jpeg'] };
+const darwinMenu = {
+  label: 'License Plate Identifier',
+  submenu: [
+    { role: 'about' },
+    { type: 'separator' },
+    {
+      role: 'services',
+      submenu: [],
+    },
+    { type: 'separator' },
+    { role: 'hide' },
+    { role: 'hideothers' },
+    { role: 'unhide' },
+    { type: 'separator' },
+    { role: 'quit' },
+  ],
+};
+const menu = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'Open File...',
+        accelerator: 'CommandOrControl+O',
+        click() { loadConfig(); },
+      },
+      { type: 'separator' },
+      { role: 'close' },
+    ],
+  },
+  {
+    label: 'Edit',
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { role: 'pasteandmatchstyle' },
+      { role: 'selectall' },
+    ],
+  },
+  {
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' },
+      { role: 'resetzoom' },
+      { role: 'zoomin' },
+      { role: 'zoomout' },
+      { type: 'separator' },
+      { role: 'toggledevtools' },
+    ],
+  },
+  {
+    role: 'window',
+    submenu: [
+      { role: 'minimize' },
+    ],
+  },
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'Help',
+        click() { shell.openExternal('https://github.com/iamkishann/license-plate-identifier'); },
+      },
+    ],
+  },
+];
+
+let window;
 
 function createMainWindow() {
-  const window = new BrowserWindow();
+  window = new BrowserWindow({
+    title: 'NGCP Ground Control Station',
+    show: false,
+  });
 
   if (isDevelopment) {
     window.webContents.openDevTools();
-  }
-
-  if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
   } else {
     window.loadURL(formatUrl({
-      pathname: path.join(__dirname, 'index.html'),
+      pathname: path.resolve(__dirname, 'index.html'),
       protocol: 'file',
       slashes: true,
     }));
   }
 
-  window.on('closed', () => {
-    mainWindow = null;
-  });
+  // window.maximize();
 
-  window.webContents.on('devtools-opened', () => {
+  window.on('ready-to-show', () => {
+    window.show();
     window.focus();
-    setImmediate(() => {
-      window.focus();
-    });
   });
 
-  return window
+  window.on('close', event => {
+    event.preventDefault();
+    window.hide();
+  });
+
+  window.on('closed', () => {
+    window = null;
+  });
+
+  return window;
 }
 
-// quit application when all windows are closed
+function createMenu() {
+  if (process.platform === 'darwin') {
+    menu.unshift(darwinMenu);
+  } else {
+    menu.push({ type: 'separator' }, { role: 'quit' });
+  }
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
+}
+
+function loadConfig() {
+  const filePaths = dialog.showOpenDialog(window, {
+    title: 'Open Configuration',
+    filters: [configFilter],
+    properties: ['openFile', 'createDirectory'],
+  });
+
+  if (!filePaths || filePaths.length === 0) return;
+
+  const data = fs.readFileSync(filePaths[0]);
+
+  if (!data) return;
+
+  window.webContents.send('loadConfig', data);
+}
+
 app.on('window-all-closed', () => {
-  // on macOS it is common for applications to stay open until the user explicitly quits
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
 app.on('activate', () => {
-  // on macOS it is common to re-create a window even after all windows have been closed
-  if (mainWindow === null) {
-    mainWindow = createMainWindow();
+  if (window === null) {
+    createMainWindow();
+  } else {
+    window.show();
   }
 });
 
-// create main BrowserWindow when electron is ready
 app.on('ready', () => {
-  mainWindow = createMainWindow();
+  createMainWindow();
+  createMenu();
 });
+
+ipcMain.on('post', (event, notification, data) => window.webContents.send(notification, data));
