@@ -45,20 +45,24 @@ class Test extends Component {
 
     this.setState({
       file: fileURL,
-      keywords: '',
-    });
+      keywords: 'Processing Image...',
 
-    imageToTextDecoder.getKeywordsForImage(file).then(keywords => {
+    });
+    // fuk u kizar
+    imageToTextDecoder.getTextForImage(file).then(keywords => {
       this.setState({ keywords: keywords });
-    }, console.error);
+    }, () => {
+      this.setState({ keywords: 'Image Not Read!' });
+    });
   }
 
   render() {
     return (
       <div>
-        <input type='file' onChange={this.handleChange} />
+
         <div id='drop' onDragOver={this.preventDefault} onDrop={this.handleDrop}>
-          <center>  <p>Drop files here!</p> </center>
+          <p>Drop files here!</p>
+          <input type='file' onChange={this.handleChange} />
         </div>
         <img src={this.state.file} />
 
