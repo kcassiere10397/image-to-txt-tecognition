@@ -49,12 +49,6 @@ class Test extends Component {
 
     });
 
-    imageToTextDecoder.getTextForImage(file).then(keywords => {
-      this.setState({ keywords: keywords });
-    }, () => {
-      this.setState({ keywords: 'Image Not Read!' });
-    });
-
     imageToTextDecoder.getKeywordsForImage(file)
       .then(keywords => {
         this.setState({ keywords: keywords });
