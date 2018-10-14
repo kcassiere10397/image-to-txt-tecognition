@@ -62,7 +62,7 @@ class Test extends Component {
 
   render() {
     return (
-      <div>
+      <div className='gridWrapper'>
         <div id='drop' onDragOver={this.preventDefault} onDrop={this.handleDrop}>
           <p>Drop files here!</p>
           <input type='file' onChange={this.handleChange} />
