@@ -5,6 +5,11 @@ import ReactDOM from 'react-dom';
 
 import './index.css';
 
+import bg from '../../resources/bg.jpg';
+import browse from '../../resources/browse.png';
+import drop from '../../resources/drop.png';
+import loading from '../../resources/loading.png';
+
 const KEY = '6NtMETDTgmia8rWbyzWMJQ';
 
 class Test extends Component {
@@ -13,7 +18,8 @@ class Test extends Component {
     imageToTextDecoder.setAuth(KEY);
 
     this.state = {
-      file: null,
+      file: drop,
+      loading: false,
       keywords: '',
     };
 
@@ -44,34 +50,71 @@ class Test extends Component {
     const fileURL = URL.createObjectURL(f);
 
     this.setState({
-      file: fileURL,
+      file: loading,
+      loading: true,
       keywords: 'Processing Image...',
-
     });
 
     imageToTextDecoder.getKeywordsForImage(file)
       .then(keywords => {
-        this.setState({ keywords: keywords });
+        this.setState({
+          file: fileURL,
+          loading: false,
+          keywords: keywords });
       }, () => {
-        this.setState({ keywords: 'Image Not Read!' });
+        this.setState({
+          file: drop,
+          loading: false,
+          keywords: 'Image Not Read!',
+        });
       })
       .catch(() => {
-        this.setState({ keywords: 'Image Not Read!' });
+        this.setState({
+          file: drop,
+          loading: false,
+          keywords: 'Image Not Read!',
+        });
       });
   }
 
   render() {
     return (
-      <div className='gridWrapper'>
-        <div id='drop' onDragOver={this.preventDefault} onDrop={this.handleDrop}>
-          <p>Drop files here!</p>
-          <input type='file' onChange={this.handleChange} />
+      <div className='wrapper'>
+        <img className='bg' src={bg} />
+        <div className='dropGrid' onDragOver={this.preventDefault} onDrop={this.handleDrop}>
+          <div className='outer'>
+            <div className='middle'>
+              <div className='inner'>
+                <label>
+                  <img className='icon' src={browse} /> Browse<input type='file' onChange={this.handleChange} />
+                </label>
+                <span>or drag image here</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <img src={this.state.file} />
 
-        <center><p>Text: {this.state.keywords}</p></center>
+        <div className='imageGrid' onDragOver={this.preventDefault} onDrop={this.handleDrop}>
+          <div className='outer'>
+            <div className='middle'>
+              <div className='inner'>
+                <div className='imageBox'>
+                  <span className='helper'></span><img className={`displayImage ${this.state.loading ? 'loading' : ''}`} src={this.state.file} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-
+        <div className='bottomGrid' onDragOver={this.preventDefault} onDrop={this.handleDrop}>
+          <div className='outer'>
+            <div className='middle'>
+              <div className='inner'>
+                <p><b>Text:</b> {this.state.keywords}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
