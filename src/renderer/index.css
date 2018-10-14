@@ -11,6 +11,8 @@ body,
   padding: 0;
   background-color: #ccc;
   text-align: center;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .dropGrid {
