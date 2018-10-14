@@ -95,15 +95,7 @@ class Test extends Component {
         </div>
 
         <div className='imageGrid' onDragOver={this.preventDefault} onDrop={this.handleDrop}>
-          <div className='outer'>
-            <div className='middle'>
-              <div className='inner'>
-                <div className='imageBox'>
-                  <span className='helper'></span><img className={`displayImage ${this.state.loading ? 'loading' : ''}`} src={this.state.file} />
-                </div>
-              </div>
-            </div>
-          </div>
+          <span className='helper'></span><img className={`displayImage ${this.state.loading ? 'loading' : ''}`} src={this.state.file} />
         </div>
 
         <div className='bottomGrid' onDragOver={this.preventDefault} onDrop={this.handleDrop}>
