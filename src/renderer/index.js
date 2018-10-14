@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 import './index.css';
 
-const KEY = 'iZvfoj_Zv7j5n4QXSWOxwg';
+const KEY = '6NtMETDTgmia8rWbyzWMJQ';
 
 class Test extends Component {
   constructor(props) {
@@ -48,7 +48,7 @@ class Test extends Component {
       keywords: 'Processing Image...',
 
     });
-    // fuk u kizar
+
     imageToTextDecoder.getTextForImage(file).then(keywords => {
       this.setState({ keywords: keywords });
     }, () => {
@@ -66,7 +66,7 @@ class Test extends Component {
         </div>
         <img src={this.state.file} />
 
-        <p>Text: {this.state.keywords}</p>
+        <center><p>Text: {this.state.keywords}</p></center>
 
 
       </div>
