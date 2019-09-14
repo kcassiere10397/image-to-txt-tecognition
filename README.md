@@ -1,5 +1,5 @@
-# Image to text recognition
-Takes Image input uses cloudsight api to extract txt, describe the image as best as possible and google txt to voice api to read the txt out.
+# IRVA
+IRVA is a client-side web application that helps the visually impaired, to recognize images through audio feedback
 
 Sign up free with cloudsightapi for 100 image requests replace the api key (`src>renderer>index.js`) 
 (`--login > default project > api keys >api key`)
